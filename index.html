@@ -3,78 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Countdown Timer</title>
+  <title>Journey Progress</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #333;
-      color: white;
       text-align: center;
-    }
-
-    .countdown {
-      font-size: 2rem;
-      background: #444;
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      color: white;
+      margin: 0;
       padding: 20px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    .progress-container {
+      width: 90%;
+      max-width: 400px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      margin: 20px auto;
+    }
+    .progress-bar {
+      width: 100%;
+      background: #ddd;
       border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      height: 30px;
+      position: relative;
     }
-
-    .countdown span {
-      font-size: 2.5rem;
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+      text-align: center;
+      line-height: 30px;
+      color: white;
       font-weight: bold;
+      border-radius: 10px;
+      transition: width 1s linear;
     }
-
-    @media (max-width: 600px) {
-      .countdown {
-        font-size: 1.5rem;
-        padding: 15px;
-      }
-
-      .countdown span {
-        font-size: 2rem;
-      }
+    .stations {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .status {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-
-  <div class="countdown" id="countdown">
-    <p>Estimated time of arrival</p>
-    <p><span id="timer">Loading...</span></p>
+  <h1>My Journey to Abu Dhabi</h1>
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div class="progress" id="progress">0%</div>
+    </div>
+    <div class="stations">
+      <span>Office</span>
+      <span>Metro</span>
+      <span>Bus</span>
+      <span>Abu Dhabi</span>
+    </div>
   </div>
+  <div class="status" id="status">Journey has not started.</div>
 
   <script>
-    // Set the target date and time for the countdown
-    const targetDate = new Date("2025-02-15T18:10:00").getTime();
-
-    // Update the countdown every second
-    const countdownFunction = setInterval(function() {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      // Calculate time remaining
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      // Display the countdown
-      document.getElementById("timer").innerHTML =
-        hours + "h " + minutes + "m " + seconds + "s ";
-
-      // If the countdown is finished
-      if (distance < 0) {
-        clearInterval(countdownFunction);
-        document.getElementById("timer").innerHTML = "Arrived ☺";
+    const startTime = new Date();
+    startTime.setHours(15, 0, 0, 0); // 3:00 PM
+    
+    const endTime = new Date();
+    endTime.setHours(18, 10, 0, 0); // 6:10 PM
+    
+    function updateProgress() {
+      const now = new Date();
+      if (now < startTime) {
+        document.getElementById("status").innerText = "Waiting for journey to start...";
+        return;
       }
-    }, 1000);
+      
+      let totalTime = endTime - startTime;
+      let elapsedTime = now - startTime;
+      let progressPercent = (elapsedTime / totalTime) * 100;
+      
+      if (progressPercent >= 100) {
+        progressPercent = 100;
+        document.getElementById("status").innerText = "Arrived in Abu Dhabi!";
+      } else if (progressPercent > 75) {
+        document.getElementById("status").innerText = "On the way to Abu Dhabi...";
+      } else if (progressPercent > 50) {
+        document.getElementById("status").innerText = "On the Bus from Al Ghubaiba...";
+      } else if (progressPercent > 25) {
+        document.getElementById("status").innerText = "Traveling via Metro...";
+      } else {
+        document.getElementById("status").innerText = "Leaving the Office...";
+      }
+      
+      document.getElementById("progress").style.width = progressPercent + "%";
+      document.getElementById("progress").innerText = Math.floor(progressPercent) + "%";
+    }
+    
+    setInterval(updateProgress, 1000);
+    updateProgress();
   </script>
-
 </body>
 </html>
