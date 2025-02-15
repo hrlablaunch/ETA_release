@@ -8,7 +8,7 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
       color: white;
       margin: 0;
       padding: 0;
@@ -16,30 +16,49 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
+      animation: fadeIn 2s ease-in-out;
     }
+    
+    .background-animation {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: url('https://source.unsplash.com/1600x900/?city,night') no-repeat center center/cover;
+      opacity: 0.2;
+      z-index: -1;
+      animation: bgFade 10s infinite alternate;
+    }
+    
     .container {
       width: 90%;
       max-width: 400px;
+      animation: slideIn 1.5s ease-out;
     }
+    
     h1 {
       margin-bottom: 10px;
+      animation: pulse 2s infinite;
     }
+    
     .progress-container {
       width: 100%;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.2);
       border-radius: 20px;
       padding: 10px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
       margin: 20px auto;
     }
+    
     .progress-bar {
       width: 100%;
-      background: #ddd;
+      background: rgba(255, 255, 255, 0.3);
       border-radius: 10px;
       overflow: hidden;
       height: 30px;
       position: relative;
     }
+    
     .progress {
       height: 100%;
       width: 0%;
@@ -50,21 +69,51 @@
       font-weight: bold;
       border-radius: 10px;
       transition: width 1s linear;
+      animation: progressGlow 1.5s infinite alternate;
     }
+    
     .stations {
       display: flex;
       justify-content: space-between;
       margin-top: 10px;
       font-size: 14px;
     }
+    
     .status {
       margin-top: 20px;
       font-size: 18px;
       font-weight: bold;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes progressGlow {
+      0% { box-shadow: 0 0 10px #4caf50; }
+      100% { box-shadow: 0 0 20px #4caf50; }
+    }
+    
+    @keyframes bgFade {
+      0% { opacity: 0.2; }
+      100% { opacity: 0.5; }
     }
   </style>
 </head>
 <body>
+  <div class="background-animation"></div>
   <div class="container">
     <h1>My Journey to Abu Dhabi</h1>
     <div class="progress-container">
@@ -72,10 +121,10 @@
         <div class="progress" id="progress"></div>
       </div>
       <div class="stations">
-        <span>3:00 PM</span>
-        <span>3:16 PM</span>
-        <span>3:30 PM</span>
-        <span>6:00 PM</span>
+        <span>Office</span>
+        <span>Union</span>
+        <span>Ghubaiba</span>
+        <span>Abu Dhabi</span>
       </div>
     </div>
     <div class="status" id="status">Journey has not started.</div>
@@ -83,16 +132,16 @@
 
   <script>
     const startTime = new Date();
-    startTime.setHours(15, 0, 0, 0); // 3:00 PM
+    startTime.setHours(15, 0, 0, 0);
     
     const metroTime = new Date();
-    metroTime.setHours(15, 16, 0, 0); // 3:16 PM
+    metroTime.setHours(15, 16, 0, 0);
     
     const busTime = new Date();
-    busTime.setHours(15, 30, 0, 0); // 3:30 PM
+    busTime.setHours(15, 30, 0, 0);
     
     const endTime = new Date();
-    endTime.setHours(14, 10, 0, 0); // 6:00 PM
+    endTime.setHours(18, 10, 0, 0);
     
     function updateProgress() {
       const now = new Date();
