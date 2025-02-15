@@ -11,14 +11,21 @@
       background: linear-gradient(135deg, #ff7e5f, #feb47b);
       color: white;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      width: 90%;
+      max-width: 400px;
     }
     h1 {
       margin-bottom: 10px;
     }
     .progress-container {
-      width: 90%;
-      max-width: 400px;
+      width: 100%;
       background: #fff;
       border-radius: 20px;
       padding: 10px;
@@ -58,26 +65,34 @@
   </style>
 </head>
 <body>
-  <h1>My Journey to Abu Dhabi</h1>
-  <div class="progress-container">
-    <div class="progress-bar">
-      <div class="progress" id="progress">0%</div>
+  <div class="container">
+    <h1>My Journey to Abu Dhabi</h1>
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+      <div class="stations">
+        <span>3:00 PM</span>
+        <span>3:16 PM</span>
+        <span>3:30 PM</span>
+        <span>6:00 PM</span>
+      </div>
     </div>
-    <div class="stations">
-      <span>Office</span>
-      <span>Metro</span>
-      <span>Bus</span>
-      <span>Abu Dhabi</span>
-    </div>
+    <div class="status" id="status">Journey has not started.</div>
   </div>
-  <div class="status" id="status">Journey has not started.</div>
 
   <script>
     const startTime = new Date();
     startTime.setHours(15, 0, 0, 0); // 3:00 PM
     
+    const metroTime = new Date();
+    metroTime.setHours(15, 16, 0, 0); // 3:16 PM
+    
+    const busTime = new Date();
+    busTime.setHours(15, 30, 0, 0); // 3:30 PM
+    
     const endTime = new Date();
-    endTime.setHours(18, 10, 0, 0); // 6:10 PM
+    endTime.setHours(14, 10, 0, 0); // 6:00 PM
     
     function updateProgress() {
       const now = new Date();
@@ -90,21 +105,17 @@
       let elapsedTime = now - startTime;
       let progressPercent = (elapsedTime / totalTime) * 100;
       
-      if (progressPercent >= 100) {
-        progressPercent = 100;
-        document.getElementById("status").innerText = "Arrived in Abu Dhabi!";
-      } else if (progressPercent > 75) {
-        document.getElementById("status").innerText = "On the way to Abu Dhabi...";
-      } else if (progressPercent > 50) {
-        document.getElementById("status").innerText = "On the Bus from Al Ghubaiba...";
-      } else if (progressPercent > 25) {
-        document.getElementById("status").innerText = "Traveling via Metro...";
+      if (now >= endTime) {
+        document.getElementById("status").innerText = "Arrived in Abu Dhabi at 6:00 PM!";
+      } else if (now >= busTime) {
+        document.getElementById("status").innerText = "On the Bus from Al Ghubaiba since 3:30 PM...";
+      } else if (now >= metroTime) {
+        document.getElementById("status").innerText = "Traveling via Metro since 3:16 PM...";
       } else {
-        document.getElementById("status").innerText = "Leaving the Office...";
+        document.getElementById("status").innerText = "Left the Office at 3:00 PM...";
       }
       
       document.getElementById("progress").style.width = progressPercent + "%";
-      document.getElementById("progress").innerText = Math.floor(progressPercent) + "%";
     }
     
     setInterval(updateProgress, 1000);
