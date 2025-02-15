@@ -19,7 +19,7 @@
       overflow: hidden;
       animation: fadeIn 2s ease-in-out;
     }
-    
+
     .background-animation {
       position: fixed;
       width: 100%;
@@ -29,18 +29,18 @@
       z-index: -1;
       animation: bgFade 10s infinite alternate;
     }
-    
+
     .container {
       width: 90%;
       max-width: 400px;
       animation: slideIn 1.5s ease-out;
     }
-    
+
     h1 {
       margin-bottom: 10px;
       animation: pulse 2s infinite;
     }
-    
+
     .progress-container {
       width: 100%;
       background: rgba(255, 255, 255, 0.2);
@@ -49,7 +49,7 @@
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
       margin: 20px auto;
     }
-    
+
     .progress-bar {
       width: 100%;
       background: rgba(255, 255, 255, 0.3);
@@ -58,7 +58,7 @@
       height: 30px;
       position: relative;
     }
-    
+
     .progress {
       height: 100%;
       width: 0%;
@@ -71,14 +71,14 @@
       transition: width 1s linear;
       animation: progressGlow 1.5s infinite alternate;
     }
-    
+
     .stations {
       display: flex;
       justify-content: space-between;
       margin-top: 10px;
       font-size: 14px;
     }
-    
+
     .status {
       margin-top: 20px;
       font-size: 18px;
@@ -90,22 +90,22 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
-    
+
     @keyframes slideIn {
       from { transform: translateY(-50px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
-    
+
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.05); }
     }
-    
+
     @keyframes progressGlow {
       0% { box-shadow: 0 0 10px #4caf50; }
       100% { box-shadow: 0 0 20px #4caf50; }
     }
-    
+
     @keyframes bgFade {
       0% { opacity: 0.2; }
       100% { opacity: 0.5; }
@@ -121,10 +121,10 @@
         <div class="progress" id="progress"></div>
       </div>
       <div class="stations">
-        <span>Office</span>
-        <span>Union</span>
-        <span>Ghubaiba</span>
-        <span>Abu Dhabi</span>
+        <span>3:00 PM</span>
+        <span>3:16 PM</span>
+        <span>3:30 PM</span>
+        <span>6:00 PM</span>
       </div>
     </div>
     <div class="status" id="status">Journey has not started.</div>
@@ -136,24 +136,24 @@
     
     const metroTime = new Date();
     metroTime.setHours(15, 16, 0, 0);
-    
+
     const busTime = new Date();
     busTime.setHours(15, 30, 0, 0);
-    
+
     const endTime = new Date();
-    endTime.setHours(18, 10, 0, 0);
-    
+    endTime.setHours(18, 0, 0, 0);
+
     function updateProgress() {
       const now = new Date();
       if (now < startTime) {
         document.getElementById("status").innerText = "Waiting for journey to start...";
         return;
       }
-      
+
       let totalTime = endTime - startTime;
       let elapsedTime = now - startTime;
       let progressPercent = (elapsedTime / totalTime) * 100;
-      
+
       if (now >= endTime) {
         document.getElementById("status").innerText = "Arrived in Abu Dhabi at 6:00 PM!";
       } else if (now >= busTime) {
@@ -163,12 +163,17 @@
       } else {
         document.getElementById("status").innerText = "Left the Office at 3:00 PM...";
       }
-      
+
       document.getElementById("progress").style.width = progressPercent + "%";
     }
-    
+
     setInterval(updateProgress, 1000);
     updateProgress();
+
+    // Auto-refresh every 60 seconds
+    setTimeout(function(){
+      location.reload();
+    }, 60000);  // Refreshes the page every 60 seconds
   </script>
 </body>
 </html>
